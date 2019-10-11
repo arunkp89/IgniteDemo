@@ -36,7 +36,7 @@ resource "azurerm_network_security_group" "k8" {
 resource "azurerm_subnet_network_security_group_association" "k8" {
   subnet_id                 = "${azurerm_subnet.k8.id}"
   network_security_group_id = "${azurerm_network_security_group.k8.id}"
-  depends_on = ["azurerm_subnet.k8","azure_network_security_group.k8"]
+  depends_on = ["azurerm_subnet.k8"]
  }
 
 resource "azurerm_virtual_network" "k8" {
