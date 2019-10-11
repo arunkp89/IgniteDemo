@@ -36,7 +36,8 @@ resource "azurerm_network_security_group" "k8" {
 resource "azurerm_subnet_network_security_group_association" "k8" {
   subnet_id                 = "${azurerm_subnet.k8.id}"
   network_security_group_id = "${azurerm_network_security_group.k8.id}"
-}
+  depends_on = ["azurerm_subnet.k8","azure_network_security_group.k8"]
+ }
 
 resource "azurerm_virtual_network" "k8" {
  name                = "kubernetes-vnet"
@@ -51,9 +52,6 @@ resource "azurerm_subnet" "k8" {
  resource_group_name  = "${var.resource_group_name}"
  virtual_network_name = "${azurerm_virtual_network.k8.name}"
  address_prefix       = "10.240.0.0/24"
-# route_table_id       = "${azurerm_route_table.k8.0.id}"
-# route_table_id       = "${azurerm_route_table.k8.1.id}"
-# route_table_id       = "${azurerm_route_table.k8.2.id}"
 }
 
 resource "azurerm_route_table" "k8" {
@@ -63,7 +61,7 @@ resource "azurerm_route_table" "k8" {
   resource_group_name           = "${var.resource_group_name}"
   disable_bgp_route_propagation = false
   route {
-    name           = "kubernetes-pods-route-${count.index}"
+    name           = "kubernetes-pods-route"
     address_prefix = "10.200.${count.index}.0/24"
     next_hop_type  = "VirtualAppliance"
     next_hop_in_ip_address = "10.240.0.2${count.index}"
