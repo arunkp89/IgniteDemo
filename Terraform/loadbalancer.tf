@@ -61,7 +61,7 @@ resource "azurerm_route_table" "k8" {
   resource_group_name           = "${var.resource_group_name}"
   disable_bgp_route_propagation = false
   route {
-    name           = "kubernetes-pods-route"
+    name           = "kubernetes-pods-route-${count.index}"
     address_prefix = "10.200.${count.index}.0/24"
     next_hop_type  = "VirtualAppliance"
     next_hop_in_ip_address = "10.240.0.2${count.index}"
