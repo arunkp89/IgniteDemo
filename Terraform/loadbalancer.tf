@@ -59,19 +59,19 @@ resource "azurerm_subnet_route_table_association" "k8" {
   count         = "${var.count_worker}"
   subnet_id      = "${azurerm_subnet.k8.id}"
   route_table_id = "${azurerm_route_table.k8.0.id}"
-  depends_on = ["azurerm_route_table.k8"]
+  depends_on = ["azurerm_route_table.k8.0.id"]
 }
 resource "azurerm_subnet_route_table_association" "k81" {
   count         = "${var.count_worker}"
   subnet_id      = "${azurerm_subnet.k8.id}"
   route_table_id = "${azurerm_route_table.k8.1.id}"
-  depends_on = ["azurerm_route_table.k8"]
+  depends_on = ["azurerm_route_table.k8.1.id"]
 }
 resource "azurerm_subnet_route_table_association" "k82" {
   count         = "${var.count_worker}"
   subnet_id      = "${azurerm_subnet.k8.id}"
   route_table_id = "${azurerm_route_table.k8.2.id}"
-  depends_on = ["azurerm_route_table.k8"]
+  depends_on = ["azurerm_route_table.k8.2.id"]
 }
 resource "azurerm_public_ip" "k8" {
  name                         = "KUBERNETES_PUBLIC_IP_ADDRESS"
