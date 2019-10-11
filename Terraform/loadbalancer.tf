@@ -55,24 +55,40 @@ resource "azurerm_subnet" "k8" {
 # route_table_id       = "${azurerm_route_table.k8.1.id}"
 # route_table_id       = "${azurerm_route_table.k8.2.id}"
 }
+
+resource "azurerm_route_table" "k8" {
+  count = "${var.count_worker}"
+  name                          = "kubernetes-routes"
+  location                      = "${var.location}"
+  resource_group_name           = "${var.resource_group_name}"
+  disable_bgp_route_propagation = false
+  route {
+    name           = "kubernetes-pods-route-${count.index}"
+    address_prefix = "10.200.${count.index}.0/24"
+    next_hop_type  = "VirtualAppliance"
+    next_hop_in_ip_address = "10.240.0.2${count.index}"
+  }
+  depends_on = ["azurerm_virtual_machine.workervms"]
+}
 resource "azurerm_subnet_route_table_association" "k8" {
   count         = "${var.count_worker}"
   subnet_id      = "${azurerm_subnet.k8.id}"
-  route_table_id = "${azurerm_route_table.k8.0.id}"
-  depends_on = ["azurerm_route_table.k8.0.id"]
+  route_table_id = "${azurerm_route_table.k8.${count.index}.id}"
+  depends_on = ["azurerm_route_table.k8.id"]
 }
-resource "azurerm_subnet_route_table_association" "k81" {
+#resource "azurerm_subnet_route_table_association" "k81" {
   count         = "${var.count_worker}"
   subnet_id      = "${azurerm_subnet.k8.id}"
   route_table_id = "${azurerm_route_table.k8.1.id}"
   depends_on = ["azurerm_route_table.k8.1.id"]
 }
-resource "azurerm_subnet_route_table_association" "k82" {
+#resource "azurerm_subnet_route_table_association" "k82" {
   count         = "${var.count_worker}"
   subnet_id      = "${azurerm_subnet.k8.id}"
   route_table_id = "${azurerm_route_table.k8.2.id}"
   depends_on = ["azurerm_route_table.k8.2.id"]
 }
+
 resource "azurerm_public_ip" "k8" {
  name                         = "KUBERNETES_PUBLIC_IP_ADDRESS"
  location                     = "${var.location}"
@@ -172,21 +188,6 @@ resource "azurerm_network_interface" "worker-nic" {
    public_ip_address_id = "${length(azurerm_public_ip.worker-pip.*.id) > 0 ? element(concat(azurerm_public_ip.worker-pip.*.id, list("")), count.index) : ""}"
  }
  depends_on = ["azurerm_public_ip.worker-pip"]
-}
-
-resource "azurerm_route_table" "k8" {
-  count = "${var.count_worker}"
-  name                          = "kubernetes-routes"
-  location                      = "${var.location}"
-  resource_group_name           = "${var.resource_group_name}"
-  disable_bgp_route_propagation = false
-  route {
-    name           = "kubernetes-pods-route"
-    address_prefix = "10.200.${count.index}.0/24"
-    next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.2${count.index}"
-  }
-  depends_on = ["azurerm_virtual_machine.workervms"]
 }
 
 resource "azurerm_availability_set" "controller-as" {
