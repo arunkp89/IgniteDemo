@@ -299,3 +299,5 @@ output "worker-pip" {
   value = "${azurerm_public_ip.worker-pip.*.ip_address}"
 }
 ## Everything is working fine, just adding a comment to commit to GitHub
+
+#terraform output|tr -d '[],="'|tr '   ' '\n'|sed 's/controller-pip/[controlvms]/g'|sed 's/worker-pip/[datavms]/g' >> /etc/ansible/hosts

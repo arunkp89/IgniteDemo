@@ -2,6 +2,12 @@
 - hosts: controlvms[0]
   become: true
   tasks:
+  - name: Update all packages to the latest version
+    apt:
+      upgrade: dist
+  - name: Rebooting the node
+    reboot:
+      reboot_timeout: 5
   - name: Installing supporting packages
     apt:
       name: "{{ packages }}"
