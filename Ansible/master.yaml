@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: controlvms[0]
   become: true
   tasks:
   - name: Installing supporting packages
@@ -92,9 +92,10 @@
 
   - name: Setup kubeconfig for kuberoot user
     file:
-     path: /home/kuberoot/.kube
-     state: directory
-     mode: '0755'
+      path: /home/kuberoot/.kube
+      state: directory
+      mode: '0755'
+  - name: Copy admin.conf file to kuberoot directory  
     copy:
      src: /etc/kubernetes/admin.conf
      dest: /home/kubernetes/.kube/config
