@@ -68,12 +68,12 @@ resource "azurerm_route_table" "k8" {
   }
   depends_on = ["azurerm_virtual_machine.workervms"]
 }
-resource "azurerm_subnet_route_table_association" "k8" {
-  count         = "${var.count_worker}"
-  subnet_id      = "${azurerm_subnet.k8.id}"
-  route_table_id = "${element(azurerm_route_table.k8.*.id,count.index)}"
-  depends_on = ["azurerm_route_table.k8"]
-}
+#resource "azurerm_subnet_route_table_association" "k8" {
+#  count         = "${var.count_worker}"
+#  subnet_id      = "${azurerm_subnet.k8.id}"
+#  route_table_id = "${element(azurerm_route_table.k8.*.id,count.index)}"
+#  depends_on = ["azurerm_route_table.k8"]
+#}
 #resource "azurerm_subnet_route_table_association" "k81" {
 #  count         = "${var.count_worker}"
 #  subnet_id      = "${azurerm_subnet.k8.id}"
