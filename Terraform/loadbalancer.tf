@@ -61,11 +61,22 @@ resource "azurerm_route_table" "k8" {
   resource_group_name           = "${var.resource_group_name}"
   disable_bgp_route_propagation = false
   route {
-    count = "${var.count_worker}"
-    name           = "kubernetes-pods-route-${count.index}"
-    address_prefix = "10.200.${count.index}.0/24"
+    name           = "kubernetes-pods-route-0"
+    address_prefix = "10.200.0.0/24"
     next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.2${count.index}"
+    next_hop_in_ip_address = "10.240.0.20"
+  }
+  route {
+    name           = "kubernetes-pods-route-1"
+    address_prefix = "10.200.1.0/24"
+    next_hop_type  = "VirtualAppliance"
+    next_hop_in_ip_address = "10.240.0.21"
+  }
+  route {
+    name           = "kubernetes-pods-route-2"
+    address_prefix = "10.200.2.0/24"
+    next_hop_type  = "VirtualAppliance"
+    next_hop_in_ip_address = "10.240.0.22"
   }
   depends_on = ["azurerm_virtual_machine.workervms"]
 }
