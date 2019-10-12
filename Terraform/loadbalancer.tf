@@ -227,7 +227,7 @@ resource "azurerm_virtual_machine" "controllervms" {
   resource_group_name   = "${var.resource_group_name}"
   availability_set_id = "${azurerm_availability_set.controller-as.id}"
   network_interface_ids = ["${element(azurerm_network_interface.controller-nic.*.id, count.index)}"]
-  vm_size               = "Standard_B1ms"
+  vm_size               = "Standard_B2ms"
 
   storage_image_reference {
     publisher = "Canonical"
@@ -262,7 +262,7 @@ resource "azurerm_virtual_machine" "workervms" {
   resource_group_name   = "${var.resource_group_name}"
   availability_set_id   = "${azurerm_availability_set.worker-as.id}"
   network_interface_ids = ["${element(azurerm_network_interface.worker-nic.*.id, count.index)}"]
-  vm_size               = "Standard_B1ms"
+  vm_size               = "Standard_B2ms"
 
   storage_image_reference {
     publisher = "Canonical"
