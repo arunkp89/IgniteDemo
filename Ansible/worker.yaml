@@ -6,8 +6,8 @@
       shell: |
         cat /home/kuberoot/kubeadm.out|grep -A 3 'kubeadm join' > kubeadm.temp
         sed -i '/^$/d' kubeadm.temp
-        head -n 3 kubeadm.2 > controlvms
-        tail -n 2 kubeadm.2 > workervms
+        head -n 3 kubeadm.temp > controlvms
+        tail -n 2 kubeadm.temp > workervms
     - name: Get the command for control plane
       command: cat /home/kuberoot/controlvms 
       register: controlvms
