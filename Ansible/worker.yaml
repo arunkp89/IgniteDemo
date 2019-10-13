@@ -11,32 +11,27 @@
     - name: Get the command for control plane
       command: cat /home/kuberoot/controlvms 
       register: controlvms
+    - debug: var=controlvms
     - name: Get the command for data plane
       command: cat /home/kuberoot/workervms 
       register: workervms
+    - debug: var=workervms
 
 
 - hosts: datavms
   become: yes
   tasks:
     - name: Joining worker VMs
-      command: {{ item }} 
-      with_items:
-       - workervms
+      command: bash {{ workervms }} 
       
-
 - hosts: controlvms[1]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: {{ item }} 
-      with_items:
-       - controlvms
-
+      command: bash {{ controlvms }} 
 - hosts: controlvms[2]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: {{ item }}
-      with_items:
-       - controlvms
+      command: bash {{ controlvms }}
+      
