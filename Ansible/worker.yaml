@@ -20,14 +20,14 @@
   become: yes
   tasks:
     - name: Joining worker VMs
-      command: {{workervms}}
+      command: {{ workervms }}
       
 
 - hosts: controlvms[1]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: {{controlvms}}
+      command: {{ controlvms }}
 
 - hosts: controlvms[2]
   become: yes
