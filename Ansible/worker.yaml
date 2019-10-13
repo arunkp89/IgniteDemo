@@ -14,7 +14,7 @@
     - debug: var=controlvms
     - name: Get the command for data plane
       command: cat /home/kuberoot/workervms 
-      register: workervms
+      register: {{ workervms.stdout }}
     - debug: var=workervms
 
 
