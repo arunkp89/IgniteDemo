@@ -11,31 +11,33 @@
     - name: Get the command for control plane
       command: cat /home/kuberoot/controlvms 
       register: controlvms
+      local_action: copy content="{{ controlvms.stdout_lines[0] }}" dest="./controlvms"
     - debug: var=controlvms
     - name: Get the command for data plane
       command: cat /home/kuberoot/workervms 
       register: workervms
+      local_action: copy content="{{ workervms.stdout_lines[0] }}" dest="./workervms"
     - debug: msg="{{ workervms.stdout }}"
+      
 
 
 - hosts: datavms
   become: yes
   tasks:
     - name: Joining worker VMs
-      command: bash {{ item }}
-      with_items:
-      - hostvars['controlvms[0]']['workervms']
+      copy: src=workervms dest=/tmp/workervms.sh mode=0777
+      command: sh /tmp/workervms.sh
       
 - hosts: controlvms[1]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: bash {{ item }}
-      with_items:
-      - hostvars['controlvms[0]']['controlvms'] 
+      copy: src=controlvms dest=/tmp/controlvms.sh mode=0777
+      command: sh /tmp/controlvms.sh
 - hosts: controlvms[2]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: bash {{ hostvars['controlvms']['controlvms'] }}
+      copy: src=controlvms dest=/tmp/controlvms.sh mode=0777
+      command: sh /tmp/controlvms.sh
       
