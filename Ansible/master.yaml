@@ -3,7 +3,9 @@
   azure_rm_publicipaddress_facts:
     resource_group: 'kubernetes'
     name: 'KUBERNETES_PUBLIC_IP_ADDRESS'
-  register: azure_lb_pip
+    register: azure_lb_pip
+- name: Copy the Kubernetes LB to a local file  
+  local_action: copy content="{{ azure_lb_pip.stdout }}" dest="./azure_lb_pip"
 
 - hosts: controlvms[0]
   become: true
