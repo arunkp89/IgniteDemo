@@ -22,16 +22,16 @@
   become: yes
   tasks:
     - name: Joining worker VMs
-      command: bash {{ hostvars['controlvms[0]']['workervms'] }}
+      command: bash {{ hostvars['controlvms']['workervms'] }}
       
 - hosts: controlvms[1]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: bash {{ hostvars['controlvms[0]']['controlvms'] }} 
+      command: bash {{ hostvars['controlvms']['controlvms'] }} 
 - hosts: controlvms[2]
   become: yes
   tasks:
     - name: Joining to control plane
-      command: bash {{ hostvars['controlvms[0]']['controlvms'] }}
+      command: bash {{ hostvars['controlvms']['controlvms'] }}
       
