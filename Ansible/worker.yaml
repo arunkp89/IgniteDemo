@@ -14,8 +14,8 @@
     - debug: var=controlvms
     - name: Get the command for data plane
       command: cat /home/kuberoot/workervms 
-      register: {{ workervms.stdout }}
-    - debug: var=workervms
+      register: workervms
+    - debug: msg="{{ workervms.stdout }}"
 
 
 - hosts: datavms
