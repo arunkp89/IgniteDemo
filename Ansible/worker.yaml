@@ -24,6 +24,7 @@
   tasks:
     - name: Joining worker VMs
       copy: src=workervms dest=/tmp/workervms.sh mode=0777
+    - name: Executing worker join script
       command: sh /tmp/workervms.sh
       
 - hosts: controlvms[1]
@@ -31,11 +32,13 @@
   tasks:
     - name: Joining to control plane
       copy: src=controlvms dest=/tmp/controlvms.sh mode=0777
+    - name: Running control node join script  
       command: sh /tmp/controlvms.sh
 - hosts: controlvms[2]
   become: yes
   tasks:
     - name: Joining to control plane
       copy: src=controlvms dest=/tmp/controlvms.sh mode=0777
+    - name: Running control node join script
       command: sh /tmp/controlvms.sh
       
