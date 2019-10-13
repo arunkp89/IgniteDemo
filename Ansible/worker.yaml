@@ -1,0 +1,36 @@
+- hosts: controlvms[0]
+  become: yes
+  gather_facts: false
+  tasks:
+    - name: Get cluster join commands for worker and control nodes
+      shell: |
+        cat /home/kuberoot/kubeadm.out|grep -A 3 'kubeadm join' > kubeadm.temp
+        sed -i '/^$/d' kubeadm.temp
+        head -n 3 kubeadm.2 > controlvms
+        tail -n 2 kubeadm.2 > workervms
+    - name: Get the command for control plane
+      command: cat /home/kuberoot/controlvms 
+      register: controlvms
+    - name: Get the command for data plane
+      command: cat /home/kuberoot/workervms 
+      register: workervms
+
+
+- hosts: workervms
+  become: yes
+  tasks:
+    - name: Joining worker VMs
+      command: workervms
+      
+
+- hosts: controlvms[1]
+  become: yes
+  tasks:
+    - name: Joining to control plane
+      command: controlvms 
+
+- hosts: controlvms[2]
+  become: yes
+  tasks:
+    - name: Joining to control plane
+      command: controlvms

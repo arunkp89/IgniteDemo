@@ -1,4 +1,10 @@
 ---
+- name: Get Public IP
+  azure_rm_publicipaddress_facts:
+    resource_group: 'kubernetes'
+    name: 'KUBERNETES_PUBLIC_IP_ADDRESS'
+  register: azure_lb_pip
+
 - hosts: controlvms[0]
   become: true
   tasks:
@@ -75,12 +81,6 @@
           - kubelet 
           - kubeadm 
           - kubectl
-
-  #- name: Configure node ip
-  #  lineinfile:
-  #      path: /etc/default/kubelet
-  #      line: KUBELET_EXTRA_ARGS=--node-ip={{ node_ip }}
-
   - name: Restart kubelet
     service:
         name: kubelet
@@ -88,13 +88,18 @@
         state: restarted
 
   - name: Initialize the Kubernetes cluster using kubeadm
-    command: kubeadm init --control-plane-endpoint 104.214.72.36:6443 --upload-certs --pod-network-cidr 10.200.0.0/16
+    tasks:
+    - name: Creating kubeadm.out file
+      command: touch /home/kuberoot/kubeadm.output
+    - name: Running kubeadm init
+      command: kubeadm init --control-plane-endpoint {{azure_lb_pip.azure_publicipaddresses}}}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
 
   - name: Setup kubeconfig for kuberoot user
+    become_user: kuberoot
     file:
       path: /home/kuberoot/.kube
       state: directory
-      mode: '0755'
+      mode: 0755
   - name: Copy admin.conf file to kuberoot directory  
     copy:
      src: /etc/kubernetes/admin.conf
