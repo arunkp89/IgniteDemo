@@ -9,14 +9,16 @@
         head -n 3 kubeadm.out > controlvms
         tail -n 2 kubeadm.out > workervms
     - name: Get the command for control plane
-      command: cat /home/kuberoot/controlvms 
-      register: controlvms
-      local_action: copy content="{{ controlvms.stdout_lines[0] }}" dest="./controlvms"
+      tasks:
+        command: cat /home/kuberoot/controlvms 
+        register: controlvms
+        local_action: copy content="{{ controlvms.stdout_lines[0] }}" dest="./controlvms"
     - debug: var=controlvms
     - name: Get the command for data plane
-      command: cat /home/kuberoot/workervms 
-      register: workervms
-      local_action: copy content="{{ workervms.stdout_lines[0] }}" dest="./workervms"
+      tasks:
+        command: cat /home/kuberoot/workervms 
+        register: workervms
+        local_action: copy content="{{ workervms.stdout_lines[0] }}" dest="./workervms"
     - debug: msg="{{ workervms.stdout }}"
       
 
