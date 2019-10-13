@@ -21,8 +21,10 @@
 - hosts: datavms
   become: yes
   tasks:
+    - debug: var=hostvars['controlvms[0]']['workervms']
+      when: hostvars['controlvms[0]']['workervms'] is defined
     - name: Joining worker VMs
-      command: bash {{ hostvars['controlvms']['workervms'] }}
+      command: bash {{ workervms }}
       
 - hosts: controlvms[1]
   become: yes
