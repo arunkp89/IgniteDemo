@@ -12,21 +12,13 @@
       command: cat /home/kuberoot/controlvms 
       register: controlvms
     - name: Copy the control plane details to local file
-      local_action: copy content="{{ controlvms.stdout_lines[0] }}" dest="./controlvms"
+      local_action: copy content="{{ controlvms }}" dest="./controlvms"
     - name: Get the command for data plane
       command: cat /home/kuberoot/workervms 
       register: workervms
     - name: Copy the data plane details to local file  
-      local_action: copy content="{{ workervms.stdout_lines[0] }}" dest="./workervms"
-
-- hosts: datavms
-  become: yes
-  tasks:
-    - name: Joining worker VMs
-      copy: src=workervms dest=/tmp/workervms.sh mode=0777
-    - name: Executing worker join script
-      command: sh /tmp/workervms.sh
-      
+      local_action: copy content="{{ workervms }}" dest="./workervms"
+     
 - hosts: controlvms[1]
   become: yes
   tasks:
@@ -41,4 +33,11 @@
       copy: src=controlvms dest=/tmp/controlvms.sh mode=0777
     - name: Running control node join script
       command: sh /tmp/controlvms.sh
-      
+
+- hosts: datavms
+  become: yes
+  tasks:
+    - name: Joining worker VMs
+      copy: src=workervms dest=/tmp/workervms.sh mode=0777
+    - name: Executing worker join script
+      command: sh /tmp/workervms.sh
