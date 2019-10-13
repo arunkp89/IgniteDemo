@@ -4,10 +4,10 @@
   tasks:
     - name: Get cluster join commands for worker and control nodes
       shell: |
-        cat /home/kuberoot/kubeadm.out|grep -A 3 'kubeadm join' > kubeadm.temp
-        sed -i '/^$/d' kubeadm.temp
-        head -n 3 kubeadm.temp > controlvms
-        tail -n 2 kubeadm.temp > workervms
+        #cat /home/kuberoot/kubeadm.out|grep -A 3 'kubeadm join' > kubeadm.temp
+        #sed -i '/^$/d' kubeadm.temp
+        head -n 3 kubeadm.out > controlvms
+        tail -n 2 kubeadm.out > workervms
     - name: Get the command for control plane
       command: cat /home/kuberoot/controlvms 
       register: controlvms
@@ -30,7 +30,9 @@
   become: yes
   tasks:
     - name: Joining to control plane
-      command: bash {{ hostvars['controlvms']['controlvms'] }} 
+      command: bash {{ item }}
+      with_items:
+      - hostvars['controlvms[0]']['controlvms'] 
 - hosts: controlvms[2]
   become: yes
   tasks:
