@@ -1,6 +1,6 @@
----
 - hosts: controlvms[0]
-  become: true
+  become: yes
+  gather_facts: false
   tasks:
     - name: Initialize the Kubernetes cluster using kubeadm
       vars:
@@ -16,7 +16,7 @@
         path: /home/kuberoot/.kube
         state: directory
         mode: 0755
-    - name: Copy admin.conf file to kuberoot directory  
+    - name: Copy admin.conf file to kuberoot directory
       copy:
       src: /etc/kubernetes/admin.conf
       dest: /home/kubernetes/.kube/config
