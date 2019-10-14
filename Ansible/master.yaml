@@ -86,13 +86,11 @@
   tasks:
   - name: Initialize the Kubernetes cluster using kubeadm
     vars:
-     contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
-    tasks:
-    - name: Creating kubeadm.out file
-      command: touch /home/kuberoot/kubeadm.output
-    - name: Running kubeadm init
-      command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
-
+      contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
+  - name: Creating kubeadm.out file
+    command: touch /home/kuberoot/kubeadm.output
+  - name: Running kubeadm init
+    command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
   - name: Setup kubeconfig for kuberoot user
     become_user: kuberoot
     file:
