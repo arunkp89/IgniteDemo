@@ -1,0 +1,8 @@
+- import_playbook: prereq-packages.yaml
+- import_playbook: docker.yaml
+- import_playbook: kubeadm.yaml
+- import_playbook: kubeadm-controlnode0.yaml
+- import_playbook: kubeadm-join-controlnodes.yaml
+- import_playbook: kubeadm-join-workernodes.yaml
+- import_playbook: kubelet-reload.yaml
+- import_playbook: podnetwork.yaml
