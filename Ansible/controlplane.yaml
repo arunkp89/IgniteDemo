@@ -8,9 +8,6 @@
       include_vars:
         file: /home/kuberot/azure_lb_pip
         name: contents
-    - name: Initialize the Kubernetes cluster using kubeadm
-      vars: 
-       contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
     - debug: msg= {{ contents }}
     - name: Running kubeadm init
       command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
