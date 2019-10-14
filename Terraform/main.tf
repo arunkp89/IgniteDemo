@@ -302,9 +302,10 @@ output "azure_lb_pip" {
   value = "${azurerm_public_ip.k8.ip_address}"
 }
 
-resource "null_resource" "copytaskvmpip" {
+resource "null_resource" "copytask" {
   provisioner "local-exec" {
-    command = "sh /data/ignite/IgniteDemo/Terraform/copyscript.sh"
+    command = "sh ./copyscript.sh"
+    
   }
 }
 
