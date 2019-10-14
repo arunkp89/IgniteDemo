@@ -2,12 +2,12 @@
   become: yes
   gather_facts: false
   tasks:
+    - name: Creating kubeadm.out file
+      command: touch /home/kuberoot/kubeadm.output
     - name: Initialize the Kubernetes cluster using kubeadm
       vars:
         contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
     - debug: msg= {{ contents }}
-    - name: Creating kubeadm.out file
-      command: touch /home/kuberoot/kubeadm.output
     - name: Running kubeadm init
       command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
     - name: Setup kubeconfig for kuberoot user
