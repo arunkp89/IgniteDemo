@@ -14,7 +14,7 @@
         file: /home/kuberoot/azure_lb_pip
         name: contents
       register: contents
-    - debug: msg= {{ contents }}
+    - debug: msg= {{ ansible_facts }}
     - name: Running kubeadm init
       command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
     - name: Setup kubeconfig for kuberoot user
