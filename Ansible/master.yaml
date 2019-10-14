@@ -1,13 +1,5 @@
 ---
-- name: Get Public IP
-  azure_rm_publicipaddress_facts:
-    resource_group: 'kubernetes'
-    name: 'KUBERNETES_PUBLIC_IP_ADDRESS'
-    register: azure_lb_pip
-- name: Copy the Kubernetes LB to a local file  
-  local_action: copy content="{{ azure_lb_pip.stdout }}" dest="./azure_lb_pip"
-
-- hosts: controlvms[0]
+- hosts: all
   become: true
   tasks:
   - name: Installing supporting packages
@@ -59,10 +51,6 @@
     with_items:
       - swap
       - none
-  #- name: Disable swap
-  #  command: swapoff -a
-  #  when: ansible_swaptotal_mb > 0
-
   - name: Add an apt signing key for Kubernetes
     apt_key:
         url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
@@ -88,13 +76,22 @@
         name: kubelet
         daemon_reload: yes
         state: restarted
+  handlers:
+    - name: docker status
+      service: name=docker state=started
 
+
+- hosts: controlvms[0]
+  become: true
+  tasks:
   - name: Initialize the Kubernetes cluster using kubeadm
+    vars:
+     contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
     tasks:
     - name: Creating kubeadm.out file
       command: touch /home/kuberoot/kubeadm.output
     - name: Running kubeadm init
-      command: kubeadm init --control-plane-endpoint {{azure_lb_pip.azure_publicipaddresses}}}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
+      command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
 
   - name: Setup kubeconfig for kuberoot user
     become_user: kuberoot
@@ -111,14 +108,3 @@
   - name: Install calico pod network
     become: false
     command: kubectl create -f https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml
-
-  - name: Generate join command
-    command: kubeadm token create --print-join-command
-    register: join_command
-
-  - name: Copy join command to local file
-    local_action: copy content="{{ join_command.stdout_lines[0] }}" dest="./join-command"
-  
-  handlers:
-    - name: docker status
-      service: name=docker state=started
