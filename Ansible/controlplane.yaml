@@ -1,3 +1,4 @@
+---
 - hosts: controlvms[0]
   become: true
   tasks:
