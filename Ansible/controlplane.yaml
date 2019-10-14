@@ -13,7 +13,7 @@
       include_vars:
         file: /home/kuberoot/azure_lb_pip
         name: contents
-        register: contents
+      register: contents
     - debug: msg= {{ contents }}
     - name: Running kubeadm init
       command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
