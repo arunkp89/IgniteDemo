@@ -302,13 +302,12 @@ output "azure_lb_pip" {
   value = "${azurerm_public_ip.k8.ip_address}"
 }
 
-resource "null_resource" "copytask" {
+resource "null_resource" "copytaskvmpip" {
   provisioner "local-exec" {
-    command = "terraform output|tr -d '[],="'|tr '   ' '\n'|sed 's/controller-pip/[controlvms]/g'|sed 's/worker-pip/[datavms]/g'|tail -n +4 > /etc/ansible/hosts"
-    command = "terraform output azure_lb_pip > home/kuberoot/azure_lb_pip"
-    interpreter = ["bash", "-e"]
+    command = "bash .copyscript.sh"
   }
 }
+
 ## Everything is working fine, just adding a comment to commit to GitHub
 
 #terraform output|tr -d '[],="'|tr '   ' '\n'|sed 's/controller-pip/[controlvms]/g'|sed 's/worker-pip/[datavms]/g'|tail -n +4 > /etc/ansible/hosts
