@@ -4,9 +4,13 @@
   tasks:
     - name: Creating kubeadm.out file
       command: touch /home/kuberoot/kubeadm.output
+    - name: Get the LB PIP
+      include_vars:
+        file: /home/kuberot/azure_lb_pip
+        name: contents
     - name: Initialize the Kubernetes cluster using kubeadm
-      vars:
-        contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
+      vars: 
+       contents: "{{ lookup('file', '/home/kuberoot/azure_lb_pip') }}"
     - debug: msg= {{ contents }}
     - name: Running kubeadm init
       command: kubeadm init --control-plane-endpoint {{ contents }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16 > /home/kuberoot/kubeadm.output
@@ -18,10 +22,10 @@
         mode: 0755
     - name: Copy admin.conf file to kuberoot directory
       copy:
-      src: /etc/kubernetes/admin.conf
-      dest: /home/kubernetes/.kube/config
-      owner: kuberoot
-      group: kuberoot
+        src: /etc/kubernetes/admin.conf
+        dest: /home/kubernetes/.kube/config
+        owner: kuberoot
+        group: kuberoot
     - name: Install calico pod network
       become: false
       command: kubectl create -f https://docs.projectcalico.org/v3.4/getting-started/kubernetes/installation/hosted/calico.yaml
