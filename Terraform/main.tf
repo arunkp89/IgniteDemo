@@ -305,8 +305,8 @@ output "azure_lb_pip" {
 resource "null_resource" "copytask" {
   provisioner "local-exec" {
     command = "sh ./copyscript.sh"
-    
   }
+  depends_on = ["azurerm_subnet_route_table_association.k8"]
 }
 
 ## Everything is working fine, just adding a comment to commit to GitHub
