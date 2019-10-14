@@ -4,7 +4,6 @@
         daemon_reload: yes
         state: restarted
 
-- name: Adding handler to kubelet
-  handlers:
-  - name: docker status
-    service: name=docker state=started 
+handlers:
+ - name: docker status
+   service: name=docker state=started 
