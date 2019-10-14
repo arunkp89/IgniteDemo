@@ -1,6 +1,7 @@
 - name: Creating kubeadm.out file
   file:
     path: /home/kuberoot/kubeadm.output
+    state: touch
     owner: kuberoot
     group: kuberoot
     mode: '0644'
