@@ -1,0 +1,4 @@
+- hosts: controlvms[0]
+  become: true
+  roles:
+   - kubeadm-controlnode0

@@ -1,0 +1,9 @@
+- hosts: controlvms[1]
+  become: true
+  roles:
+   - kubeadm-join-controlnodes
+
+- hosts: controlvms[2]
+  become: true
+  roles:
+   - kubeadm-join-controlnodes
