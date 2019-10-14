@@ -7,7 +7,7 @@
     - name: Copy file to remote machine
       copy:
         src: /home/kuberoot/azure_lb_pip
-        dst: /home/kuberoot/azure_lb_pip
+        dest: /home/kuberoot/azure_lb_pip
         mode: 0644
     - name: Get the LB PIP
       include_vars:
