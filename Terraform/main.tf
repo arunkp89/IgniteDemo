@@ -304,7 +304,7 @@ output "azure_lb_pip" {
 
 resource "null_resource" "copytaskvmpip" {
   provisioner "local-exec" {
-    command = "bash .copyscript.sh"
+    command = "sh /data/ignite/IgniteDemo/Terraform/copyscript.sh"
   }
 }
 
