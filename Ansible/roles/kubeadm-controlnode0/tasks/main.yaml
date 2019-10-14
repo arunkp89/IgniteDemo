@@ -1,0 +1,44 @@
+- name: Creating kubeadm.out file
+  file:
+    path: /home/kuberoot/kubeadm.output
+    owner: kuberoot
+    group: kuberoot
+    mode: '0644'
+
+- name: Running kubeadm init
+  command: kubeadm init --control-plane-endpoint {{ azure_lb_pip }}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16
+  register: out
+
+- name: Copy kubeadm init output
+  action: copy content="{{ out.stdout }}" dest="/home/kuberoot/kubeadm.out"
+
+- name: Setup kubeconfig for kuberoot user
+  command: "{{ item }}"
+  with_items:
+    - mkdir -p /home/kuberoot/.kube
+    - cp -i /etc/kubernetes/admin.conf /home/kuberoot/.kube/config
+    - chown kuberoot:kuberoot /home/kuberoot/.kube/config
+
+- name: Get cluster join commands for worker and control nodes
+  shell: |
+    cat /home/kuberoot/kubeadm.out|grep -A 3 'kubeadm join' > kubeadm.temp
+    sed -i '/^$/d' kubeadm.temp
+    head -n 3 kubeadm.temp > controlvms
+    tail -n 2 kubeadm.temp > workervms
+
+- name: Get the command for control plane
+  command: cat /home/kuberoot/controlvms 
+  register: controlvms
+
+- name: Copy the control plane details to local file
+  local_action: copy content="{{ controlvms.stdout }}" dest="./controlvms"
+
+- name: Get the command for data plane
+  command: cat /home/kuberoot/workervms 
+  register: workervms
+
+- name: Copy the data plane details to local file  
+  local_action: copy content="{{ workervms.stdout }}" dest="./workervms"
+
+
+    

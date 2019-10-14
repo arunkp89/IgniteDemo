@@ -1,0 +1,5 @@
+- name: Joining worker VMs
+  copy: src=workervms dest=/tmp/workervms.sh mode=0777
+  
+- name: Executing worker join script
+  command: sh /tmp/workervms.sh

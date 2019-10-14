@@ -1,0 +1,12 @@
+- name: Joining to control plane
+  copy: src=controlvms dest=/tmp/controlvms.sh mode='0777'
+
+- name: Running control node join script  
+  command: sh /tmp/controlvms.sh
+
+- name: Setup kubeconfig for kuberoot user
+  command: "{{ item }}"
+  with_items:
+    - mkdir -p /home/kuberoot/.kube
+    - cp -i /etc/kubernetes/admin.conf /home/kuberoot/.kube/config
+    - chown kuberoot:kuberoot /home/kuberoot/.kube/config
