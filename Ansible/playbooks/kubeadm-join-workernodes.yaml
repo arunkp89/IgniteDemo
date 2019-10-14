@@ -1,4 +1,4 @@
-- hosts: workervms
+- hosts: datavms
   become: true
   roles:
    - kubeadm-join-workernodes
