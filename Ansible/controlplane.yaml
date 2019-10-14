@@ -11,7 +11,7 @@
         mode: 0644
     - name: Get the LB PIP
       include_vars:
-        file: /home/kuberot/azure_lb_pip
+        file: /home/kuberoot/azure_lb_pip
         name: contents
     - debug: msg= {{ contents }}
     - name: Running kubeadm init
