@@ -3,5 +3,5 @@ terraform output|tr -d '[],=""'|tr '   ' '\n'|sed 's/controller-pip/[controlvms]
 echo -e \n
 echo "[all:vars]" >> ../Ansible/inventory/cluster
 echo azure_lb_pip=`terraform output azure_lb_pip` >> ../Ansible/inventory/cluster
-ansible_ssh_user=kuberoot
-ansible_ssh_private_key_file=/home/arun/clouddrive/.ssh/pkey.pem
+#ansible_ssh_user=kuberoot
+#ansible_ssh_private_key_file=/home/arun/clouddrive/.ssh/pkey.pem
