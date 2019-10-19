@@ -64,20 +64,20 @@ resource "azurerm_route_table" "k8" {
     name           = "kubernetes-pods-route-0"
     address_prefix = "10.200.0.0/16"
     next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.20"
+    next_hop_in_ip_address = "10.240.0.0/24"
   }
-  route {
-    name           = "kubernetes-pods-route-1"
-    address_prefix = "10.200.0.0/16"
-    next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.21"
-  }
-  route {
-    name           = "kubernetes-pods-route-2"
-    address_prefix = "10.200.0.0/16"
-    next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.22"
-  }
+  #route {
+  #  name           = "kubernetes-pods-route-1"
+  #  address_prefix = "10.200.0.0/16"
+  #  next_hop_type  = "VirtualAppliance"
+  #  next_hop_in_ip_address = "10.240.0.21"
+  #}
+  #route {
+  #  name           = "kubernetes-pods-route-2"
+  #  address_prefix = "10.200.0.0/16"
+  #  next_hop_type  = "VirtualAppliance"
+  #  next_hop_in_ip_address = "10.240.0.22"
+  #}
   depends_on = ["azurerm_virtual_machine.workervms"]
 }
 resource "azurerm_subnet_route_table_association" "k8" {
