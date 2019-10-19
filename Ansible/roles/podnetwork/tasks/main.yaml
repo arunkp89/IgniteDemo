@@ -1,3 +1,10 @@
+- name: Copy calcio.yaml file to the nodes
+  become: false
+  template:
+   src: calcio.yaml
+   dest: $HOME/calcio.yaml
+
 - name: Install calico pod network
   become: false
-  command: kubectl create -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+  #command: kubectl create -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+  command: kubectl create -f $HOME/calcio.yaml
