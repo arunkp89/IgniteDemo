@@ -2,7 +2,7 @@ variable "location" {
   default = "southcentralus"
 }
 variable "resource_group_name" {
-  default = "kubernetes"
+  default = "kubernetesdemo"
 }
 variable "adress_prefix" {
   default = "10.240.0.0/24"
