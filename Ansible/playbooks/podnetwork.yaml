@@ -1,4 +1,4 @@
-- hosts: controlvms[0]
+- hosts: all
   become: true
   roles:
    - podnetwork

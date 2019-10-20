@@ -1,4 +1,14 @@
-- name: Install calico pod network
-  become: false
-  command: kubectl create -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+- name: Copy azure-cni script
+  copy:
+    src: ../templates/installscript.sh
+    dest: /tmp/installscript.sh
+    mode: '0777'
+
+- name: Execute azure-cni script
+  shell: /tmp/installscript.sh
+
+
+#- name: Install calico pod network
+#  become: false
+#  command: kubectl create -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
   
