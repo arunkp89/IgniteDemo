@@ -1,6 +1,6 @@
 - name: Copy calcio.yaml file to the nodes
-  template:
-   src: calcio.yaml.j2
+  copy:
+   src: ../templates/calcio.yaml
    dest: /tmp/calcio.yaml
 
 - name: Install calico pod network
