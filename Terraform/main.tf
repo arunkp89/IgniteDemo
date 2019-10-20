@@ -64,7 +64,7 @@ resource "azurerm_route_table" "k8" {
     name           = "kubernetes-pods-route-0"
     address_prefix = "10.200.0.0/16"
     next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.0/24"
+    next_hop_in_ip_address = "10.240.0.20"
   }
   route {
     name           = "kubernetes-pods-route-1"
