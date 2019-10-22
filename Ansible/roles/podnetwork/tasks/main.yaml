@@ -5,10 +5,4 @@
     mode: '0777'
 
 - name: Execute azure-cni script
-  shell: /tmp/installscript.sh
-
-
-#- name: Install calico pod network
-#  become: false
-#  command: kubectl create -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
-  
+  shell: /tmp/installscript.sh 

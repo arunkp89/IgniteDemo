@@ -5,4 +5,5 @@
 - import_playbook: kubeadm-join-controlnodes.yaml
 - import_playbook: kubeadm-join-workernodes.yaml
 - import_playbook: kubelet-reload.yaml
+- import_playbook: allocate-private-ips.yaml
 - import_playbook: podnetwork.yaml

@@ -1,0 +1,5 @@
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  roles:
+  - allocate-private-ips

@@ -1,4 +1,3 @@
-
 resource "azurerm_resource_group" "k8" {
   name     = "${var.resource_group_name}"
   location = "${var.location}"
@@ -41,7 +40,7 @@ resource "azurerm_subnet_network_security_group_association" "k8" {
 
 resource "azurerm_virtual_network" "k8" {
  name                = "kubernetes-vnet"
- address_space       = ["10.240.0.0/24"]
+ address_space       = ["10.240.0.0/16"]
  location            = "${var.location}"
  resource_group_name = "${var.resource_group_name}"
  depends_on          = ["azurerm_resource_group.k8"]
@@ -51,53 +50,8 @@ resource "azurerm_subnet" "k8" {
  name                 = "kubernetes-subnet"
  resource_group_name  = "${var.resource_group_name}"
  virtual_network_name = "${azurerm_virtual_network.k8.name}"
- address_prefix       = "10.240.0.0/24"
+ address_prefix       = "10.240.0.0/16"
 }
-
-resource "azurerm_route_table" "k8" {
-  #count = "${var.count_worker}"
-  name                          = "kubernetes-routes"
-  location                      = "${var.location}"
-  resource_group_name           = "${var.resource_group_name}"
-  disable_bgp_route_propagation = false
-  route {
-    name           = "kubernetes-pods-route-0"
-    address_prefix = "10.200.0.0/16"
-    next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.20"
-  }
-  route {
-    name           = "kubernetes-pods-route-1"
-    address_prefix = "10.200.1.0/24"
-    next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.21"
-  }
-  route {
-    name           = "kubernetes-pods-route-2"
-    address_prefix = "10.200.2.0/24"
-    next_hop_type  = "VirtualAppliance"
-    next_hop_in_ip_address = "10.240.0.22"
-  }
-  depends_on = ["azurerm_virtual_machine.workervms"]
-}
-resource "azurerm_subnet_route_table_association" "k8" {
-  count         = "${var.count_worker}"
-  subnet_id      = "${azurerm_subnet.k8.id}"
-  route_table_id = "${element(azurerm_route_table.k8.*.id,count.index)}"
-  depends_on = ["azurerm_route_table.k8"]
-}
-#resource "azurerm_subnet_route_table_association" "k81" {
-#  count         = "${var.count_worker}"
-#  subnet_id      = "${azurerm_subnet.k8.id}"
-#  route_table_id = "${azurerm_route_table.k8.1.id}"
-#  depends_on = ["azurerm_route_table.k8.1.id"]
-#}
-#resource "azurerm_subnet_route_table_association" "k82" {
-#  count         = "${var.count_worker}"
-#  subnet_id      = "${azurerm_subnet.k8.id}"
-#  route_table_id = "${azurerm_route_table.k8.2.id}"
-#  depends_on = ["azurerm_route_table.k8.2.id"]
-#}
 
 resource "azurerm_public_ip" "k8" {
  name                         = "KUBERNETES_PUBLIC_IP_ADDRESS"
@@ -193,7 +147,7 @@ resource "azurerm_network_interface" "worker-nic" {
  ip_configuration {
    name                          = "worker-${count.index}-ip"
    subnet_id                     = "${azurerm_subnet.k8.id}"
-   private_ip_address            = "10.240.0.2${count.index}"
+   private_ip_address            = "10.240.2${count.index}.0"
    private_ip_address_allocation = "Static"
    public_ip_address_id = "${length(azurerm_public_ip.worker-pip.*.id) > 0 ? element(concat(azurerm_public_ip.worker-pip.*.id, list("")), count.index) : ""}"
  }
@@ -289,7 +243,7 @@ resource "azurerm_virtual_machine" "workervms" {
         }
   }
   tags = {
-        pod-cidr = "[10.200.${count.index}.0/24]"
+        pod-cidr = "[10.240.2${count.index}.0/24]"
     }
 }
 output "controller-pip" {
@@ -302,13 +256,5 @@ output "azure_lb_pip" {
   value = "${azurerm_public_ip.k8.ip_address}"
 }
 
-resource "null_resource" "copytask" {
-  provisioner "local-exec" {
-    command = "sh ./copyscript.sh"
-  }
-  depends_on = ["azurerm_subnet_route_table_association.k8"]
-}
+## Doing a final commit after modifying Pod Network
 
-## Everything is working fine, just adding a comment to commit to GitHub
-
-#terraform output|tr -d '[],="'|tr '   ' '\n'|sed 's/controller-pip/[controlvms]/g'|sed 's/worker-pip/[datavms]/g'|tail -n +4 > /etc/ansible/hosts
