@@ -32,10 +32,10 @@
   register: controlvms
 
 - name: Copy the control plane details to local file
-  copy:
+  fetch:
    src: /home/kuberoot/controlvms
-   dest: /tmp/controlvms
-   remote_src: yes
+   dest: /tmp/
+   flat: yes
 
   #local_action: copy content="{{ controlvms.stdout }}" dest="/tmp/controlvms"
 
@@ -44,10 +44,10 @@
   register: workervms
 
 - name: Copy the data plane details to local file  
-  copy:
+  fetch:
    src: /home/kuberoot/workervms
-   dest: /tmp/workervms
-   remote_src: yes
+   dest: /tmp/
+   flat: yes
   #local_action: copy content="{{ workervms.stdout }}" dest="/tmp/workervms"
 
 
