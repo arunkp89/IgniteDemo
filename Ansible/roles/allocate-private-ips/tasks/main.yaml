@@ -1,8 +1,6 @@
 - name: Assigning multiple IPs to the worker NICs  
   shell: |
-   for i in {1..10}; do az network nic ip-config create --name ipconfig-$i --nic-name worker-0-nic -g kubernetes \
-   --private-ip-address 10.240.20.$i ;done
-   for i in {1..10}; do az network nic ip-config create --name ipconfig-$i --nic-name worker-1-nic -g kubernetes \
-   --private-ip-address 10.240.21.$i ;done
-   for i in {1..10}; do az network nic ip-config create --name ipconfig-$i --nic-name worker-2-nic -g kubernetes \
-   --private-ip-address 10.240.22.$i ;done
+   az network nic ip-config create --name "ipconfig-{{ item }}" --nic-name worker-0-nic -g kubernetes --private-ip-address "10.240.20.{{ item }}"
+   az network nic ip-config create --name "ipconfig-{{ item }}" --nic-name worker-1-nic -g kubernetes --private-ip-address "10.240.21.{{ item }}"
+   az network nic ip-config create --name "ipconfig-{{ item }}" --nic-name worker-2-nic -g kubernetes --private-ip-address "10.240.22.{{ item }}"
+  with_sequence: start=1 end=10

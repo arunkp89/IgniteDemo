@@ -40,7 +40,7 @@ resource "azurerm_subnet_network_security_group_association" "k8" {
 
 resource "azurerm_virtual_network" "k8" {
  name                = "kubernetes-vnet"
- address_space       = ["10.240.0.0/16"]
+ address_space       = ["10.0.0.0/8"]
  location            = "${var.location}"
  resource_group_name = "${var.resource_group_name}"
  depends_on          = ["azurerm_resource_group.k8"]

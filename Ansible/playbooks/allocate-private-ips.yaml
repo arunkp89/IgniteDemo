@@ -1,4 +1,4 @@
-- name: Create Azure VM
+- name: Allocating Private IPs
   hosts: localhost
   gather_facts: false
   connection: local

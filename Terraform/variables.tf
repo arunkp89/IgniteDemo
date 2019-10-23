@@ -4,9 +4,7 @@ variable "location" {
 variable "resource_group_name" {
   default = "kubernetes"
 }
-variable "adress_prefix" {
-  default = "10.240.0.0/24"
-}
+
 variable "port_ssh" {
   default = "22"
 }
