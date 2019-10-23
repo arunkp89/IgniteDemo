@@ -1,5 +1,5 @@
 - name: Joining to control plane
-  copy: src=controlvms dest=/tmp/controlvms.sh mode='0777'
+  copy: src=/tmp/controlvms dest=/tmp/controlvms.sh mode='0777'
 
 - name: Running control node join script  
   command: sh /tmp/controlvms.sh
