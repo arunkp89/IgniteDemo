@@ -32,14 +32,23 @@
   register: controlvms
 
 - name: Copy the control plane details to local file
-  local_action: copy content="{{ controlvms.stdout }}" dest="/tmp/controlvms"
+  copy:
+   src: /home/kuberoot/controlvms
+   dest: /tmp/controlvms
+   remote_src: yes
+
+  #local_action: copy content="{{ controlvms.stdout }}" dest="/tmp/controlvms"
 
 - name: Get the command for data plane
   command: cat /home/kuberoot/workervms 
   register: workervms
 
 - name: Copy the data plane details to local file  
-  local_action: copy content="{{ workervms.stdout }}" dest="/tmp/workervms"
+  copy:
+   src: /home/kuberoot/workervms
+   dest: /tmp/workervms
+   remote_src: yes
+  #local_action: copy content="{{ workervms.stdout }}" dest="/tmp/workervms"
 
 
     
