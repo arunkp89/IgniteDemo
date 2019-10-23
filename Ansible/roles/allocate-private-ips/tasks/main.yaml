@@ -1,41 +1,8 @@
 - name: Assigning multiple IPs to the worker NICs  
-  azure_rm_networkinterface:
-    name: worker-0-nic
-    resource_group: kubernetes
-    virtual_network: kubernetes-vnet
-    subnet_name: kubernetes-subnet
-    create_with_security_group: False
-    ip_configurations:
-      - name: ipconfig"{{ item }}"
-        primary: False
-        private_ip_address: 10.240.20."{{ item }}"
-        private_ip_allocation_method: Static
-  with_sequence: start=1 end=50
-
-- name: Assigning multiple IPs to the worker NICs  
-  azure_rm_networkinterface:
-    name: worker-1-nic
-    resource_group: kubernetes
-    virtual_network: kubernetes-vnet
-    subnet_name: kubernetes-subnet
-    create_with_security_group: False
-    ip_configurations:
-      - name: ipconfig"{{ item }}"
-        primary: False
-        private_ip_address: 10.240.21."{{ item }}"
-        private_ip_allocation_method: Static
-  with_sequence: start=1 end=50
-
-- name: Assigning multiple IPs to the worker NICs  
-  azure_rm_networkinterface:
-    name: worker-2-nic
-    resource_group: kubernetes
-    virtual_network: kubernetes-vnet
-    subnet_name: kubernetes-subnet
-    create_with_security_group: False
-    ip_configurations:
-      - name: ipconfig"{{ item }}"
-        primary: False
-        private_ip_address: 10.240.22."{{ item }}"
-        private_ip_allocation_method: Static
-  with_sequence: start=1 end=50
+  shell: |
+   for i in {1..10}; do az network nic ip-config create --name ipconfig-$i --nic-name worker-0-nic -g kubernetes \
+   --private-ip-address 10.240.20.$i ;done
+   for i in {1..10}; do az network nic ip-config create --name ipconfig-$i --nic-name worker-1-nic -g kubernetes \
+   --private-ip-address 10.240.21.$i ;done
+   for i in {1..10}; do az network nic ip-config create --name ipconfig-$i --nic-name worker-2-nic -g kubernetes \
+   --private-ip-address 10.240.22.$i ;done
