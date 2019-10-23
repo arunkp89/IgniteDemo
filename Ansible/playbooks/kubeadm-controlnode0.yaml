@@ -1,4 +1,5 @@
 - hosts: controlvms[0]
+  gather_facts: false
   become: true
   roles:
    - kubeadm-controlnode0

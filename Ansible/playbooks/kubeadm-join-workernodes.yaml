@@ -1,4 +1,5 @@
 - hosts: datavms
+  gather_facts: false
   become: true
   roles:
    - kubeadm-join-workernodes

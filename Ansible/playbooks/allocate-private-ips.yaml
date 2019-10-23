@@ -1,5 +1,6 @@
 - name: Create Azure VM
   hosts: localhost
+  gather_facts: false
   connection: local
   roles:
   - allocate-private-ips
