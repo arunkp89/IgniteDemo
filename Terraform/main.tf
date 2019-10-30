@@ -50,7 +50,7 @@ resource "azurerm_subnet" "k8" {
  name                 = "kubernetes-subnet"
  resource_group_name  = "${var.resource_group_name}"
  virtual_network_name = "${azurerm_virtual_network.k8.name}"
- address_prefix       = "10.240.0.0/16"
+ address_prefix       = "10.200.0.0/16"
 }
 
 resource "azurerm_public_ip" "k8" {
