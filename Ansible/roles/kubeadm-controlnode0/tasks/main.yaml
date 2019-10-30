@@ -7,7 +7,7 @@
     mode: '0644'
 
 - name: Running kubeadm init
-  command: kubeadm init --control-plane-endpoint {{azure_lb_pip}}:6443 --upload-certs --pod-network-cidr 10.200.0.0/16
+  command: kubeadm init --control-plane-endpoint {{azure_lb_pip}}:6443 --upload-certs --pod-network-cidr 10.240.0.0/16
   register: out
 
 - name: Copy kubeadm init output
