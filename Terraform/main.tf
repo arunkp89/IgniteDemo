@@ -126,7 +126,7 @@ resource "azurerm_network_interface" "controller-nic" {
    private_ip_address            = "10.240.0.1${count.index}"
    private_ip_address_allocation = "Static"
    #load_balancer_backend_address_pools_ids = ["${azurerm_lb_backend_address_pool.k8.id}"]
-   public_ip_address_id = "${length(azurerm_public_ip.controller-pip.*.id) > 0 ? element(concat(azurerm_public_ip.controller-pip.*.id, tolist([""]), count.index) : ""}"
+   public_ip_address_id = "${length(azurerm_public_ip.controller-pip.*.id) > 0 ? element(concat(azurerm_public_ip.controller-pip.*.id, tolist([""])), count.index) : ""}"
 }
 depends_on = ["azurerm_public_ip.controller-pip"]
 }
@@ -149,7 +149,7 @@ resource "azurerm_network_interface" "worker-nic" {
    subnet_id                     = "${azurerm_subnet.k8.id}"
    private_ip_address            = "10.240.2${count.index}.0"
    private_ip_address_allocation = "Static"
-   public_ip_address_id = "${length(azurerm_public_ip.worker-pip.*.id) > 0 ? element(concat(azurerm_public_ip.worker-pip.*.id, tolist([""]), count.index) : ""}"
+   public_ip_address_id = "${length(azurerm_public_ip.worker-pip.*.id) > 0 ? element(concat(azurerm_public_ip.worker-pip.*.id, tolist([""])), count.index) : ""}"
  }
  depends_on = ["azurerm_public_ip.worker-pip"]
 }
