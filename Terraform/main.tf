@@ -101,13 +101,12 @@ resource "azurerm_lb_probe" "k8" {
 }
 
 resource "azurerm_lb_rule" "k8" {
-   resource_group_name            = "${var.resource_group_name}"
    loadbalancer_id                = "${azurerm_lb.k8.id}"
    name                           = "kubernetes-apiserver-probe"
    protocol                       = "Tcp"
    frontend_port                  = "${var.port_apiserver}"
    backend_port                   = "${var.port_apiserver}"
-   backend_address_pool_id        = "${azurerm_lb_backend_address_pool.k8.id}"
+   backend_address_pool_ids        = "${azurerm_lb_backend_address_pool.k8.id}"
    frontend_ip_configuration_name = "kubernetes-pip"
    probe_id                       = "${azurerm_lb_probe.k8.id}"
 }
