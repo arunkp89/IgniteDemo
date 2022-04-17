@@ -187,7 +187,7 @@ resource "azurerm_virtual_machine" "controllervms" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
@@ -222,7 +222,7 @@ resource "azurerm_virtual_machine" "workervms" {
   storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
-    sku       = "18.04-LTS"
+    sku       = "16.04-LTS"
     version   = "latest"
   }
   storage_os_disk {
