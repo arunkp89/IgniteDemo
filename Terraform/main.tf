@@ -24,7 +24,7 @@ resource "azurerm_network_security_group" "k8" {
   }
   security_rule {
     name                       = "kubernetes-allow-api-server"
-    priority                   = 1001
+    priority                   = 100
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
