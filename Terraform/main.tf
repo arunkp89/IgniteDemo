@@ -111,8 +111,8 @@ resource "azurerm_lb_rule" "k8" {
    frontend_port                  = "${var.port_apiserver}"
    backend_port                   = "${var.port_apiserver}"
    frontend_ip_configuration_name = "kubernetes-pip"
-   backend_address_pool_ids       = "${azurerm_lb_backend_address_pool.k8.id}" 
-   probe_id                       = ["azurerm_lb_probe.k8.id"]
+   backend_address_pool_ids       = "azurerm_lb_backend_address_pool.k8.id" 
+   probe_id                       = "$azurerm_lb_probe.k8.id"
    depends_on          = ["azurerm_lb_backend_address_pool.k8"]
 }
 
