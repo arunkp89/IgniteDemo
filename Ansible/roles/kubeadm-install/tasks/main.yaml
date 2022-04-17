@@ -6,7 +6,6 @@
   apt_repository:
         repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
         state: present
-        filename: kubernetes.list
 - name: Install Kubernetes binaries
   apt: 
         name: "{{ packages }}"
@@ -14,6 +13,9 @@
         update_cache: yes
   vars:
         packages:
+          - apt-transport-https 
+          - ca-certificates 
+          - curl
           - kubelet 
           - kubeadm 
           - kubectl
