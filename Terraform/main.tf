@@ -50,7 +50,7 @@ resource "azurerm_subnet" "k8" {
  name                 = "kubernetes-subnet"
  resource_group_name  = "${var.resource_group_name}"
  virtual_network_name = "${azurerm_virtual_network.k8.name}"
- address_prefixes       = "10.240.0.0/16"
+ address_prefixes       = ["10.240.0.0/16"]
 }
 
 resource "azurerm_public_ip" "k8" {
@@ -88,13 +88,11 @@ resource "azurerm_lb" "k8" {
 }
 
 resource "azurerm_lb_backend_address_pool" "k8" {
- resource_group_name = "${var.resource_group_name}"
  loadbalancer_id     = "${azurerm_lb.k8.id}"
  name                = "kubernetes-lb-pool"
 }
 
 resource "azurerm_lb_probe" "k8" {
- resource_group_name = "${var.resource_group_name}"
  loadbalancer_id     = "${azurerm_lb.k8.id}"
  name                = "kubernetes-apiserver-probe"
  port                = "${var.port_apiserver}"
