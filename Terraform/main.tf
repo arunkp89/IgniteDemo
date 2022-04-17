@@ -110,7 +110,6 @@ resource "azurerm_lb_rule" "k8" {
    protocol                       = "Tcp"
    frontend_port                  = "${var.port_apiserver}"
    backend_port                   = "${var.port_apiserver}"
-   backend_address_pool_ids        = "${azurerm_lb_backend_address_pool.k8.id}"
    frontend_ip_configuration_name = "kubernetes-pip"
    probe_id                       = "${azurerm_lb_probe.k8.id}"
 }
@@ -127,7 +126,7 @@ resource "azurerm_network_interface" "controller-nic" {
    private_ip_address            = "10.240.0.1${count.index}"
    private_ip_address_allocation = "Static"
    #load_balancer_backend_address_pools_ids = ["${azurerm_lb_backend_address_pool.k8.id}"]
-   public_ip_address_id = "${length(azurerm_public_ip.controller-pip.*.id) > 0 ? element(concat(azurerm_public_ip.controller-pip.*.id, list("")), count.index) : ""}"
+   public_ip_address_id = "${length(azurerm_public_ip.controller-pip.*.id) > 0 ? element(concat(azurerm_public_ip.controller-pip.*.id, tolist([""])), count.index) : ""}"
 }
 depends_on = ["azurerm_public_ip.controller-pip"]
 }
